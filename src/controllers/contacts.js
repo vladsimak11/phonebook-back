@@ -17,6 +17,12 @@ const listContacts = async (req, res, next) => {
 const addContact = async (req, res, next) => {
   try {
     const { _id: owner} = req.user;
+
+    // Перевірка автентифікації
+    if (!owner) {
+      throw HttpError(401, "Authentication required");
+    }
+
     const result = await Contact.create({...req.body, owner});
 
     res.status(201).json(result);
